@@ -1,0 +1,18 @@
+  autosign    = $confdir/autosign.conf { mode = 0664 }
+
+[master]
+  facts_terminus           = inventory_active_record
+  pluginsync               = true
+  reports                  = log,foreman
+  tagmap                   = $confdir/tagmail.conf
+  dbpassword               = puppet_db_password
+  dbserver                 = localhost
+  dbadapter                = mysql
+  dbuser                   = puppet
+  dbname                   = puppet
+  ssl_client_header        = SSL_CLIENT_S_DN
+  ssl_client_verify_header = SSL_CLIENT_VERIFY
+  node_terminus            = exec
+  external_nodes           = /etc/puppet/node.rb
+  storeconfigs             = true
+  thin_storeconfigs        = true

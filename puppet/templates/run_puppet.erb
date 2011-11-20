@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# Script to run puppet from cron every half hour
+# Checks for idle processes more than 2 hours old
+# and kills them
+# Author: G S Sutclife <gsutcliffe@ibahn.com>
+# Copyright iBahn Oct 2011
+
+# Right now, in seconds
+NOW=`date '+%s'`
+
+# Get last run time
+<% if has_variable?("operatingsystemrelease") and operatingsystemrelease == "3.0" then -%>
+TIMESTAMP=`stat /var/lib/puppet/state/last_run_summary.yaml|grep "Change"|cut -f1 -d'.'|cut -d' ' -f2-7`
+<% else -%>
+TIMESTAMP=`stat /var/lib/puppet/state/last_run_summary.yaml|grep "Change"|cut -f1 -d'.'|cut -d' ' -f2-3`
+<% end -%>
+LAST_RUN=`date -d "$TIMESTAMP" '+%s'`
+
+TIME=$[${NOW}-${LAST_RUN}]
+
+# Kill stale processes of over 2 hours
+(( $TIME > 7200 )) && pkill -9 -f '/usr/bin/ruby1.8 /usr/bin/puppet agent'
+
+# Now run puppet itself
+# Don't specify the full path here - it's OS specific
+puppet agent >/dev/null 2>&1

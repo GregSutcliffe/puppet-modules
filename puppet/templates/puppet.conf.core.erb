@@ -1,0 +1,14 @@
+[main]
+  server      = <%= puppetmaster %>.<%= domain %>
+  logdir      = /var/log/puppet
+  vardir      = /var/lib/puppet
+  ssldir      = /var/lib/puppet/ssl
+  rundir      = /var/run/puppet
+  pluginsync  = true
+  report      = true
+<% if has_variable?("p_daemonize") and p_daemonize == "true" then -%>
+  daemonize   = true
+<% else -%>
+  daemonize   = false
+  onetime     = true
+<% end -%>
