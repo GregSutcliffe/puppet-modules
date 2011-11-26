@@ -8,45 +8,31 @@ class puppet::agent {
   $minute1 = fqdn_rand(30)
   $minute2 = $minute1 + 30
   cron { 'puppet-agent':
-    ensure  => $p_daemonize ? {
-      'true'  => absent,
-      default => present
-    },
+    ensure  => present,
     command => '/usr/local/sbin/run_puppet',
-    user    => root,
+    user    => 'root',
     hour    => '*',
     minute  => [ $minute1, $minute2 ]
   }
 
   file { '/usr/local/sbin/run_puppet':
-    ensure  => $p_daemonize ? {
-      'true'  => absent,
-      default => present
-    },
+    ensure  => present,
     owner   => 'root',
     group   => 'root',
     mode    => 744,
     content => template('puppet/run_puppet.erb')
   }
 
-  # Daemon setup
+  # Disable Daemon setup
   file { '/etc/default/puppet':
-    ensure  => $p_daemonize ? {
-      'true'  => present,
-      default => absent
-    },
-    content => "START=yes\nDAEMON_OPTS=''\n"
+    ensure  => absent
   }
   
   service { 'puppet':
-    ensure    => $p_daemonize ? {
-         'true' => running,
-        default => stopped
-    },
+    ensure    => stopped,
     status    => $operatingsystem ? {
       "Archlinux" => "pgrep puppetd",
-         "Ubuntu" => "/etc/init.d/puppet status",
-          default => undef
+          default => "/etc/init.d/puppet status"
     },
     provider  => $operatingsystem ? {
       "Archlinux" => "init",

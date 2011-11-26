@@ -1,4 +1,0 @@
-class puppet::agent::cron {
-
-
-}
