@@ -1,18 +1,9 @@
 class puppet::install {
 
-  $packages = $operatingsystem ? {
-    "Archlinux" => [ "puppet", "facter" ],
-    "Debian"    => [ "facter", "puppet", "puppet-common" ],
-    default     => [ ]
-  }
-
-  package { $packages:
-    ensure  => latest,
-    notify  => Class["puppet::agent"],
-    provider => $operatingsystem ? {
-      "Archlinux" => "yaourt",  # Use my custom yaourt provider
-      default     => undef,
-    }
+  case $operatingsystem {
+    "Archlinux": { include puppet::install::archlinux }
+    "Debian":    { include puppet::install::debian }
+    default:     { warn("Unknown Operatingsystem for puppet::install: $operatingsystem") }
   }
 
 }
