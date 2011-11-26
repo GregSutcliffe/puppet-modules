@@ -5,7 +5,6 @@ class puppet::install::archlinux {
   package { $packages:
     ensure   => latest,
     notify   => Class["puppet::agent"],
-    provider => "yaourt"
   }
 
 }

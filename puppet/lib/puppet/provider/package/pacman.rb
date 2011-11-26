@@ -1,17 +1,32 @@
 require 'puppet/provider/package'
 
-Puppet::Type.type(:package).provide :yaourt, :parent => Puppet::Provider::Package do
-  desc "Support for the Package Manager Utility (yaourt) used in Archlinux."
+Puppet::Type.type(:package).provide :pacman, :parent => Puppet::Provider::Package do
+  desc "Support for the Package Manager Utility (pacman) used in Archlinux."
 
+  commands :pacman => "/usr/bin/pacman"
+  # Yaourt is a common AUR helper which, if installed, we can use to query the AUR
   commands :yaourt => "/usr/bin/yaourt"
-  confine    :operatingsystem => :archlinux
+
+  confine     :operatingsystem => :archlinux
+  defaultfor  :operatingsystem => :archlinux
   has_feature :upgradeable
 
-  # Install a package using 'yaourt'.
+  # If yaourt is installed, we can make use of it
+  def yaourt?
+    return File.exists? '/usr/bin/yaourt'
+  end
+
+  # Install a package using 'pacman', or 'yaourt' if available.
   # Installs quietly, without confirmation or progressbar, updates package
   # list from servers defined in pacman.conf.
   def install
-    yaourt "--noconfirm", "-Sy", @resource[:name]
+    pacman "-Sy"
+
+    if yaourt?
+      yaourt "--noconfirm", "-S", @resource[:name]
+    else
+      pacman "--noconfirm", "-S", @resource[:name]
+    end
 
     unless self.query
       raise Puppet::ExecutionFailure.new("Could not find package %s" % self.name)
@@ -19,7 +34,7 @@ Puppet::Type.type(:package).provide :yaourt, :parent => Puppet::Provider::Packag
   end
 
   def self.listcmd
-    [command(:yaourt), " -Q"]
+    [command(:pacman), " -Q"]
   end
 
   # Fetch the list of packages currently installed on the system.
@@ -27,7 +42,7 @@ Puppet::Type.type(:package).provide :yaourt, :parent => Puppet::Provider::Packag
     packages = []
     begin
       execpipe(listcmd()) do |process|
-        # yaourt -Q output is 'packagename version-rel'
+        # pacman -Q output is 'packagename version-rel'
         regex = %r{^(\S+)\s(\S+)}
         fields = [:name, :ensure]
         hash = {}
@@ -57,23 +72,38 @@ Puppet::Type.type(:package).provide :yaourt, :parent => Puppet::Provider::Packag
   # Because Archlinux is a rolling release based distro, installing a package
   # should always result in the newest release.
   def update
-    # Install in yaourt can be used for update, too
+    # Install in pacman can be used for update, too
     self.install
   end
 
+  # We rescue the main check from Pacman with a check on the AUR using yaourt, if installed
   def latest
-    yaourt "-Sy"
-    output = yaourt "-Qma", @resource[:name]
-    output.split("\n").each do |line|
-      output = line.split[1] if line =~ /^aur/
+    pacman "-Sy"
+    pacman_check = true   # Query the main repos first
+    begin
+      if pacman_check
+        output = pacman "-Sp", "--print-format", "%v", @resource[:name]
+        return output.chomp
+      else 
+        output = yaourt "-Qma", @resource[:name]
+        output.split("\n").each do |line|
+          return line.split[1].chomp if line =~ /^aur/
+        end  
+      end
+    rescue Puppet::ExecutionFailure
+      if pacman_check and self.yaourt?
+        pacman_check = false # now try the AUR
+        retry
+      else
+        raise
+      end
     end
-    output.chomp
   end
 
-  # Querys the yaourt master list for information about the package.
+  # Querys the pacman master list for information about the package.
   def query
     begin
-      output = yaourt("-Qi", @resource[:name])
+      output = pacman("-Qi", @resource[:name])
 
       if output =~ /Version.*:\s(.+)/
         return { :ensure => $1 }
@@ -91,6 +121,6 @@ Puppet::Type.type(:package).provide :yaourt, :parent => Puppet::Provider::Packag
 
   # Removes a package from the system.
   def uninstall
-    yaourt "--noconfirm", "-R", @resource[:name]
+    pacman "--noconfirm", "-R", @resource[:name]
   end
 end

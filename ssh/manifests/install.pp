@@ -5,6 +5,7 @@ class ssh::install {
     "Debian"    => [ "openssh-server" ],
     default     => [ ]
   }
+
   package { $packages:
     ensure  => latest,
   }
