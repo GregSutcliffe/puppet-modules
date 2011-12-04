@@ -5,7 +5,7 @@ Puppet::Type.type(:package).provide :pacman, :parent => Puppet::Provider::Packag
 
   commands :pacman => "/usr/bin/pacman"
   # Yaourt is a common AUR helper which, if installed, we can use to query the AUR
-  commands :yaourt => "/usr/bin/yaourt"
+  commands :yaourt => "/usr/bin/yaourt" if File.exists? '/usr/bin/yaourt'
 
   confine     :operatingsystem => :archlinux
   defaultfor  :operatingsystem => :archlinux
