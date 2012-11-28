@@ -1,4 +1,5 @@
 class users {
+  include sudo
 
   # Class to ensure I exist everywhere
   user { 'greg':
@@ -23,5 +24,11 @@ class users {
     owner   => 'greg',
     content => template('users/greg.sshkey.pub')
   }
+
+  sudo::directive { "greg":
+    ensure  => present,
+    content => "greg ALL=(ALL) NOPASSWD: ALL\n",
+  }
+
 
 }
