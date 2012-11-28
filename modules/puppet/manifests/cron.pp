@@ -1,5 +1,5 @@
 class puppet::cron inherits puppet::service {
-  Service['puppet'] {
+  Service["${puppet::service_name}"] {
     enable => false,
     ensure => stopped,
   }

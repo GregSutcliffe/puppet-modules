@@ -1,3 +1,3 @@
 class puppet::service {
-  service {'puppet': require => Class['puppet::install'] }
+  service {"${puppet::service_name}": require => Class['puppet::install'] }
 }

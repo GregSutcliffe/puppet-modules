@@ -61,6 +61,11 @@ class puppet::params {
     default           => '/usr/sbin',
   }
 
+  $service_name =  $::operatingsystem ? {
+    "Archlinux" => 'puppetagent',
+    default     => 'puppet',
+  }
+
   $puppetca_cmd = "${puppetca_path}/${puppetca_bin}"
 
 }
