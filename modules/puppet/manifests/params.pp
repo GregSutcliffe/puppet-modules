@@ -62,7 +62,7 @@ class puppet::params {
   }
 
   $service_name =  $::operatingsystem ? {
-    "Archlinux" => 'puppetagent',
+    "Archlinux" => 'puppetagent.service',
     default     => 'puppet',
   }
 
