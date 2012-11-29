@@ -30,5 +30,9 @@ class users {
     content => "greg ALL=(ALL) NOPASSWD: ALL\n",
   }
 
+  sudo::directive { "foreman-proxy":
+    ensure  => present,
+    content => "foreman-proxy ALL = NOPASSWD : /usr/bin/puppet\nDefaults:foreman-proxy !requiretty\n",
+  }
 
 }
