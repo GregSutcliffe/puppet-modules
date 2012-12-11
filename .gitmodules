@@ -4,3 +4,6 @@
 [submodule "modules/tftp"]
 	path = modules/tftp
 	url = https://github.com/GregSutcliffe/puppet-tftp.git
+[submodule "modules/foreman_proxy"]
+	path = modules/foreman_proxy
+	url = https://github.com/GregSutcliffe/puppet-foreman_proxy.git
