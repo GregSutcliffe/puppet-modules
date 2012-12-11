@@ -1,0 +1,3 @@
+[submodule "modules/puppet"]
+	path = modules/puppet
+	url = https://github.com/GregSutcliffe/puppet-puppet.git
