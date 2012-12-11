@@ -1,3 +1,6 @@
 [submodule "modules/puppet"]
 	path = modules/puppet
 	url = https://github.com/GregSutcliffe/puppet-puppet.git
+[submodule "modules/tftp"]
+	path = modules/tftp
+	url = https://github.com/GregSutcliffe/puppet-tftp.git
