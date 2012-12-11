@@ -39,6 +39,7 @@ define foreman::install::repos(
         refreshonly => true
       }
     }
+    Archlinux: { }  # No repo required
     default: { fail("${::hostname}: This module does not support operatingsystem ${::operatingsystem}") }
   }
 }
