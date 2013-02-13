@@ -1,0 +1,9 @@
+0.7.0:
+
+* Use augeas to change server entries leaving the rest of the config file
+alone
+
+0.6.1:
+
+* Added support for the iburst parameter (thanks Greg Anderson)
+

@@ -1,0 +1,7 @@
+rm /files/etc/ntp.conf/server
+<% servers.each do |server| -%>
+set /files/etc/ntp.conf/server[last()+1] <%= server %>
+<% if iburst -%>
+clear /files/etc/ntp.conf/server[. = '<%= server %>']/iburst
+<% end -%>
+<% end -%>
