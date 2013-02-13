@@ -1,7 +1,7 @@
 class foreman::params {
 
 # Basic configurations
-  $foreman_url  = "http://${::fqdn}"
+  $foreman_url  = "https://${::fqdn}"
   # Should foreman act as an external node classifier (manage puppet class
   # assignments)
   $enc          = true
