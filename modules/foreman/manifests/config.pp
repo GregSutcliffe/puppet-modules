@@ -12,6 +12,28 @@ class foreman::config {
     require => User[$foreman::user],
   }
 
+  case $::operatingsystem {
+    Archlinux: {
+      $init_config = '/etc/conf.d/foreman'
+      $init_config_tmpl = 'foreman.sysconfig'
+    }
+    Debian,Ubuntu: {
+      $init_config = '/etc/default/foreman'
+      $init_config_tmpl = 'foreman.default'
+    }
+    default: {
+      $init_config = '/etc/sysconfig/foreman'
+      $init_config_tmpl = 'foreman.sysconfig'
+    }
+  }
+
+  file { $init_config:
+    ensure  => present,
+    content => template("foreman/${init_config_tmpl}.erb"),
+    require => Class['foreman::install'],
+    before  => Class['foreman::service'],
+  }
+
   file { $foreman::app_root:
     ensure  => directory,
   }
@@ -24,16 +46,11 @@ class foreman::config {
     require => Class['foreman::install'],
   }
 
-  # cleans up the session entries in the database
-  # if you are using fact or report importers, this creates a session per
-  # request which can easily result with a lot of old and unrequired in your
-  # database eventually slowing it down.
-  cron{'clear_session_table':
-    command => "(cd ${foreman::app_root} && rake db:sessions:clear)",
-    minute  => '15',
-    hour    => '23',
+  # remove crons previously installed here, they've moved to the package's
+  # cron.d file
+  cron { ['clear_session_table', 'expire_old_reports', 'daily summary']:
+    ensure => absent,
   }
 
-  if $foreman::reports { include foreman::config::reports }
   if $foreman::passenger  { include foreman::config::passenger }
 }

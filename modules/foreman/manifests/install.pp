@@ -1,7 +1,7 @@
 class foreman::install {
   if ! $foreman::custom_repo {
     foreman::install::repos { 'foreman':
-      use_testing    => $foreman::use_testing,
+      repo => $foreman::repo
     }
   }
 
@@ -18,15 +18,15 @@ class foreman::install {
 
   if $foreman::use_sqlite {
     case $::operatingsystem {
-      Debian,Ubuntu: { $sqlite = "foreman-sqlite3" }
-      default:       { $sqlite = "foreman-sqlite" }
+      Debian,Ubuntu: { $sqlite = 'foreman-sqlite3' }
+      default:       { $sqlite = 'foreman-sqlite' }
     }
 
     package {'foreman-sqlite3':
-      name => $sqlite,
-      ensure  => latest,
+      ensure  => present,
+      name    => $sqlite,
       require => $repo,
-      notify  => [Class['foreman::service'],Package['foreman']],
+      notify  => [Class['foreman::service'], Package['foreman']],
     }
   }
 

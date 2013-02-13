@@ -2,7 +2,10 @@ class foreman::config::enc (
   $foreman_url  = $foreman::params::foreman_url,
   $facts        = $foreman::params::facts,
   $storeconfigs = $foreman::params::storeconfigs,
-  $puppet_home  = $foreman::params::puppet_home
+  $puppet_home  = $foreman::params::puppet_home,
+  $ssl_ca       = $foreman::params::client_ssl_ca,
+  $ssl_cert     = $foreman::params::client_ssl_cert,
+  $ssl_key      = $foreman::params::client_ssl_key
 ) inherits foreman::params {
 
   File { require => Class['::puppet::server::install'] }
@@ -16,13 +19,11 @@ class foreman::config::enc (
   file { "${puppet_home}/yaml":
     ensure  => directory,
     recurse => true,
-    mode    => '0640',
     owner   => 'puppet',
     group   => 'puppet',
   }
   file { "${puppet_home}/yaml/foreman":
     ensure  => directory,
-    mode    => '0640',
     owner   => 'puppet',
     group   => 'puppet',
   }
