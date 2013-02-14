@@ -20,6 +20,8 @@ node default {
         content => "#!/bin/bash\nexec ionice -c 2 -n 7 nice -n 19 pacman -Sy\n"
       }
 
+      package { 'ruby-augeas': ensure => installed }
+
     }
     default:     { }
   }
