@@ -3,6 +3,7 @@ class ntp::service {
   $service_name =  $::operatingsystem ? {
     "Archlinux" => 'ntpd.service',  # systemd workaround
     "Ubuntu"    => 'ntp',
+    "Debian"    => 'ntp',
     default     => 'ntpd',
   }
 
