@@ -1,4 +1,4 @@
-class users {
+class users ($userhash = undef) {
   include sudo
 
   # Class to ensure I exist everywhere
