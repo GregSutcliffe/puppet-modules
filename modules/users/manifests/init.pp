@@ -18,11 +18,4 @@ class users (
     create_resources(users::user, $users)
   }
 
-  if $::hostname == "minerva" {
-    sudo::directive { "nicki":
-      ensure  => present,
-      content => "nicki ALL=(ALL) ALL\n",
-    }
-  }
-
 }
