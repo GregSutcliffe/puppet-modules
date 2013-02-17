@@ -1,33 +1,21 @@
-class users ($userhash = undef) {
+class users (
+  $admins = undef,
+  $users  = undef
+) {
   include sudo
 
-  # Class to ensure I exist everywhere
-  user { 'greg':
-    ensure     => present,
-    comment    => 'Greg Sutcliffe',
-    home       => '/home/greg',
-    managehome => true,
-    name       => 'greg',
-    shell      => '/bin/bash',
-    uid        => 2000,
+  if $admins == undef {
+    # nothing to do
+  }
+  else {
+    create_resources(users::admin, $admins)
   }
 
-  file { '/home/greg/.ssh':
-    ensure => directory,
-    mode   => 0700,
-    owner  => 'greg',
+  if $users == undef {
+    # nothing to do
   }
-
-  file { '/home/greg/.ssh/authorized_keys':
-    ensure  => present,
-    mode    => 0600,
-    owner   => 'greg',
-    content => template('users/greg.sshkey.pub')
-  }
-
-  sudo::directive { "greg":
-    ensure  => present,
-    content => "greg ALL=(ALL) NOPASSWD: ALL\n",
+  else {
+    create_resources(users::user, $users)
   }
 
   if $::hostname == "minerva" {
