@@ -3,7 +3,7 @@ define users::user (
   $passwd = undef,
   $key    = undef,
   $uid    = undef,
-  $shell  = 'bin/bash'
+  $shell  = '/bin/bash'
 ) {
 
   user { $name:
