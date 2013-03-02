@@ -1,0 +1,42 @@
+dirvish
+
+Module for creating and managing a backup solution using Dirvish
+
+Dependencies
+------------
+
+* puppetlabs-stdlib
+
+Parameters
+----------
+
+[*backup_location*]
+  The core path that the backups should live in. Defaults to "/srv/backups". The
+  parent of this path should exist, or Puppet will be unable to create the dir.
+
+Examples
+--------
+
+    class { dirvish:
+      backup_location => '/backups'
+    }
+
+Copyright
+---------
+
+Copyright 2013 Greg Sutcliffe
+
+License
+-------
+
+GPL3
+
+Contact
+-------
+
+Greg Sutcliffe <greg.sutcliffe@gmail.com>
+
+Support
+-------
+
+Please log tickets and issues at my [github page](https://github/GregSutcliffe/puppet-dirvish)

@@ -1,0 +1,27 @@
+{
+  "name": "gwmngilfen-dirvish",
+  "version": "0.0.1",
+  "source": "UNKNOWN",
+  "author": "gwmngilfen",
+  "license": "Apache License, Version 2.0",
+  "summary": "UNKNOWN",
+  "description": "UNKNOWN",
+  "project_page": "UNKNOWN",
+  "dependencies": [
+    {
+      "name": "puppetlasbs/stdlib"
+    }
+  ],
+  "types": [
+
+  ],
+  "checksums": {
+    "Modulefile": "493e513efdb8d9827c02f5a27c94d1dd",
+    "README": "3bddea73d6f0704ec1c8ee6c317852b2",
+    "manifests/config.pp": "0047069e8d2e37086a555504e68de200",
+    "manifests/init.pp": "f2db347eace25388dc0d9df8af4df4f0",
+    "manifests/install.pp": "ccd8f1ef90dcf2b58f6993588a7c3007",
+    "manifests/params.pp": "d4eafe0cb718c59a46e319bb927e1215",
+    "manifests/service.pp": "3f19c780022c16b7a0b6b1b0bf5087d3"
+  }
+}

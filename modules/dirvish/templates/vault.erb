@@ -1,0 +1,21 @@
+client: <%= client %>
+tree: <%= tree %>
+
+xdev: true
+index: gzip
+image-default: %Y%m%d
+
+rsh: ssh -oStrictHostKeyChecking=no -i<%= scope.lookupvar('::dirvish::backup_location') %>/ssh/dirvish_key
+
+# This script is created on all dirvish::client machines
+pre-client: /etc/dirvish_pre_client
+
+expire-rule:
+  mday { 1 } +6 months
+
+expire-default: +30 days
+
+<% unless excludes.empty? -%>
+exclude:
+  <%= excludes.join("\n  ") %>
+<% end -%>
