@@ -10,3 +10,6 @@
 [submodule "modules/apache"]
 	path = modules/apache
 	url = https://github.com/theforeman/puppet-apache
+[submodule "modules/passenger"]
+	path = modules/passenger
+	url = https://github.com/theforeman/puppet-passenger
