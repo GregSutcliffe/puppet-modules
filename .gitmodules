@@ -7,3 +7,6 @@
 [submodule "modules/foreman_proxy"]
 	path = modules/foreman_proxy
 	url = https://github.com/GregSutcliffe/puppet-foreman_proxy.git
+[submodule "modules/apache"]
+	path = modules/apache
+	url = https://github.com/theforeman/puppet-apache
