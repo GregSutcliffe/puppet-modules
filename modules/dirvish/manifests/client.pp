@@ -7,7 +7,7 @@ class dirvish::client (
 ) {
 
   # Read the dirvish key from the puppetmaster
-  $pub_key  = ssh_keygen('dirvish_key','public')
+  $pub_key  = ssh_keygen({name => 'dirvish_key', public => 'true'})
 
   file_line { 'dirvish_ssh_pubkey':
     ensure => present,
