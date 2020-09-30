@@ -6,7 +6,7 @@ are also some Archlinux/Puppet hacks in (manifests/site.pp)
 
 # Notable unpublished modules
 
-Most decent modules I write get published separately. Currently there are 2
+Most decent modules that I write get published separately. Currently there are 2
 modules here awaiting publication:
 
 ## SSH
